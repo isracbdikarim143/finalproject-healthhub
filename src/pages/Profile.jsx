@@ -86,7 +86,7 @@ export function Profile() {
     try {
       await updateProfile({
         name,
-        avatar_url,
+        avatar_url: avatarUrl,
       });
 
       toast.success('Profile updated successfully');

@@ -75,9 +75,9 @@ export function Water() {
     setSubmitting(true); // LOADING STATE: Start
     try {
       const { error } = await supabase.from('water_logs').insert({
-        user_id,
-        amount_ml,
-        date,
+        user_id: user.id,
+        amount_ml: amount,
+        date: date,
       });
 
       if (error) throw error;

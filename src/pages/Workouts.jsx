@@ -77,11 +77,11 @@ export function Workouts() {
     setSubmitting(true); // LOADING STATE: Start submission
     try {
       const { error } = await supabase.from('workouts').insert({
-        user_id,
-        exercise_name,
+        user_id: user.id,
+        exercise_name: formData.exercise_name,
         duration: parseInt(formData.duration),
         calories_burned: parseInt(formData.calories_burned),
-        date,
+        date: formData.date,
       });
 
       if (error) throw error;

@@ -74,10 +74,10 @@ export function Progress() {
 
         dailyData.push({
           date: format(new Date(date), 'MMM dd'),
-          workouts,
+          workouts: workoutsCount,
           caloriesBurned,
           nutritionCalories,
-          waterIntake,
+          waterIntake: waterIntake / 1000, // Convert ml to liters for better chart display
         });
       }
 
