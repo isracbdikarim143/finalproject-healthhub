@@ -1,0 +1,156 @@
+import { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { toast } from '../Toast';
+import { UserPlus } from 'lucide-react';
+
+interface SignupProps {
+  onToggle: () => void;
+}
+
+export function Signup({ onToggle }: SignupProps) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { signUp } = useAuth();
+
+  // AUTH OPTIMIZATION: Client-side validation before API call
+  const validateForm = (): boolean => {
+    // Name validation
+    if (name.trim().length < 2) {
+      toast.error('⚠️ Name must be at least 2 characters');
+      return false;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('⚠️ Please enter a valid email address');
+      return false;
+    }
+
+    // Password length validation (min 6 characters)
+    if (password.length < 6) {
+      toast.error('⚠️ Password must be at least 6 characters');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // AUTH OPTIMIZATION: Validate before sending request
+    if (!validateForm()) return;
+    
+    // AUTH OPTIMIZATION: Disable button and show loading state
+    setLoading(true);
+
+    try {
+      // AUTH OPTIMIZATION: Send request to Supabase Auth with real credentials
+      await signUp(email, password, name);
+      
+      // AUTH OPTIMIZATION: Show success toast (redirect handled by Auth page)
+      toast.success('✅ Account created successfully');
+    } catch (error: any) {
+      // AUTH OPTIMIZATION: Show friendly error messages
+      toast.error(error.message || 'Failed to sign up');
+    } finally {
+      // AUTH OPTIMIZATION: Re-enable button
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 dark:from-gray-900 dark:to-gray-800 px-4">
+      <div className="card max-w-md w-full">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-4">
+            <UserPlus className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Join <span className="text-primary-600">HealthHub</span>
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Start your health journey today
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="label">
+              Full Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="input"
+              placeholder="John Doe"
+              minLength={2}
+              required
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Your first and last name
+            </p>
+          </div>
+
+          <div>
+            <label htmlFor="email" className="label">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input"
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="label">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input"
+              placeholder="••••••••"
+              minLength={6}
+              required
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Minimum 6 characters
+            </p>
+          </div>
+
+          {/* AUTH OPTIMIZATION: Button disabled during API call, shows loading text */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary w-full"
+          >
+            {loading ? 'Creating account...' : 'Create Account'}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+          Already have an account?{' '}
+          <button
+            onClick={onToggle}
+            className="text-primary-600 hover:text-primary-700 font-medium"
+          >
+            Sign in
+          </button>
+        </p>
+      </div>
+    </div>
+  );
+}
