@@ -291,23 +291,23 @@ export function Dashboard() {
               <Activity className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
           </div>
-          {stats.latestBMI ? (
+          {stats.latestBMI?.bmi ? (
             <div>
               <div className="flex items-baseline gap-4 mb-2">
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {stats.latestBMI.bmi}
+                  {stats.latestBMI.bmi ?? 'N/A'}
                 </p>
                 <p
                   className={`text-xl font-semibold ${getBMICategoryColor(
                     stats.latestBMI.category
                   )}`}
                 >
-                  {stats.latestBMI.category}
+                  {stats.latestBMI.category ?? 'Unknown'}
                 </p>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Height: {stats.latestBMI.height}cm | Weight:{' '}
-                {stats.latestBMI.weight}kg
+                Height: {stats.latestBMI.height ?? 'N/A'}cm | Weight:{' '}
+                {stats.latestBMI.weight ?? 'N/A'}kg
               </p>
             </div>
           ) : (

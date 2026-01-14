@@ -1,4 +1,9 @@
 export function calculateBMI(height, weight) {
+  // SAFE BMI: Handle null/undefined/zero values
+  if (!height || !weight || height <= 0 || weight <= 0) {
+    return null;
+  }
+  
   // height in cm, weight in kg
   const heightInMeters = height / 100;
   const bmi = weight / (heightInMeters * heightInMeters);

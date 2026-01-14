@@ -60,8 +60,15 @@ export function Sidebar() {
     setSavingBMI(true);
 
     try {
-      // Calculate BMI
+      // Calculate BMI with null safety
       const bmi = calculateBMI(heightNum, weightNum);
+      
+      // SAFE: Only proceed if BMI calculation succeeded
+      if (bmi === null) {
+        toast.error('Unable to calculate BMI. Please check your input values.');
+        return;
+      }
+      
       const category = getBMICategory(bmi);
 
       // Save to database

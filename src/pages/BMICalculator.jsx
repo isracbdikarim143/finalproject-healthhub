@@ -66,10 +66,17 @@ export function BMICalculator() {
 
     setCalculating(true); // BMI FIX: Start calculating state
 
-    // BMI FIX: Calculate using cm and kg (formula)
+    // BMI FIX: Calculate using cm and kg (formula) with null safety
     const bmi = calculateBMI(heightNum, weightNum);
+    
+    // SAFE: Only proceed if BMI calculation succeeded
+    if (bmi === null) {
+      toast.error('Unable to calculate BMI. Please check your input values.');
+      setCalculating(false);
+      return;
+    }
+    
     const category = getBMICategory(bmi);
-
     setCurrentBMI({ value: bmi, category });
 
     try {

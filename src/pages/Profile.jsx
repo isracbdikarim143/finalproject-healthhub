@@ -51,8 +51,8 @@ export function Profile() {
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, file, {
-          contentType,
-          upsert, // Allow overwriting
+          contentType: file.type,
+          upsert: true, // Allow overwriting
         });
 
       if (uploadError) {
