@@ -12,7 +12,7 @@ export function Nutrition() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [selectedFood, setSelectedFood] = useState('');
-  // LOADING STATE, setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     date: format(new Date(), 'yyyy-MM-dd'),
   });
@@ -77,14 +77,14 @@ export function Nutrition() {
     setSubmitting(true); // LOADING STATE: Start
     try {
       const { error } = await supabase.from('nutrition').insert({
-        user_id,
-        food_name,
-        category,
-        calories,
-        protein,
-        fat,
-        carbs,
-        date,
+        user_id: user.id,
+        food_name: food.name,
+        category: food.category,
+        calories: food.calories,
+        protein: food.protein,
+        fat: food.fat,
+        carbs: food.carbs,
+        date: formData.date,
       });
 
       if (error) throw error;
