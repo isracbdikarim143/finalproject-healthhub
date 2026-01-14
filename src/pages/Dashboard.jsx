@@ -13,6 +13,7 @@ export function Dashboard() {
     totalCaloriesBurned: 0,
     totalWaterIntake: 0,
     totalNutritionCalories: 0,
+    latestBMI: null,
   });
   const [loading, setLoading] = useState(true);
 
@@ -74,7 +75,7 @@ export function Dashboard() {
         totalCaloriesBurned,
         totalWaterIntake,
         totalNutritionCalories,
-        latestBMI,
+        latestBMI: bmiData || null,
       });
     } catch (error) {
       console.error('Error loading stats:', error);
