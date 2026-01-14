@@ -30,8 +30,7 @@ const navigation = [
 export function Sidebar() {
   const { user, profile } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  
-  // BMI SIDEBAR, setHeight] = useState('');
+  const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [savingBMI, setSavingBMI] = useState(false);
 
