@@ -67,9 +67,9 @@ export function Sidebar() {
 
       // Save to database
       const { error } = await supabase.from('bmi_logs').insert({
-        user_id,
-        height,
-        weight,
+        user_id: user.id,
+        height: heightNum,
+        weight: weightNum,
         bmi,
         category,
       });

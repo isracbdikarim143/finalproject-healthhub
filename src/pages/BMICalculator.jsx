@@ -12,7 +12,7 @@ export function BMICalculator() {
   const [weight, setWeight] = useState('');
   const [bmiHistory, setBmiHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-  // BMI FIX, setCalculating] = useState(false);
+  const [calculating, setCalculating] = useState(false);
   const [currentBMI, setCurrentBMI] = useState(null);
 
   useEffect(() => {
@@ -66,18 +66,18 @@ export function BMICalculator() {
 
     setCalculating(true); // BMI FIX: Start calculating state
 
-    // BMI FIX: Calculate using cm and kg (formula)²)
+    // BMI FIX: Calculate using cm and kg (formula)
     const bmi = calculateBMI(heightNum, weightNum);
     const category = getBMICategory(bmi);
 
-    setCurrentBMI({ value, category });
+    setCurrentBMI({ value: bmi, category });
 
     try {
       // BMI FIX: Save to bmi_logs table for dashboard realtime update
       const { error } = await supabase.from('bmi_logs').insert({
-        user_id,
-        height,
-        weight,
+        user_id: user.id,
+        height: heightNum,
+        weight: weightNum,
         bmi,
         category,
       });
