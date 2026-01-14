@@ -10,6 +10,7 @@ export interface UserProfile {
   id: string;
   user_id: string;
   name: string;
+  email?: string | null;
   avatar_url?: string;
   height?: number;
   weight?: number;

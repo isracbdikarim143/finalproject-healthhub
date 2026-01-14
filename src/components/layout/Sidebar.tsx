@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
 import { supabase } from '../../lib/supabase';
 import { toast } from '../Toast';
 import { calculateBMI, getBMICategory } from '../../utils/bmi';
@@ -11,9 +10,6 @@ import {
   Droplet,
   TrendingUp,
   User,
-  LogOut,
-  Moon,
-  Sun,
   Menu,
   X,
   Clock,
@@ -32,23 +28,13 @@ const navigation = [
 ];
 
 export function Sidebar() {
-  // FIX: Import signOut from useAuth
-  const { user, profile, signOut } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+  const { user, profile } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   
   // BMI SIDEBAR: State for BMI input
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [savingBMI, setSavingBMI] = useState(false);
-
-  const handleLogout = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
 
   // FIX: Add handleSaveBMI function that was missing
   const handleSaveBMI = async () => {

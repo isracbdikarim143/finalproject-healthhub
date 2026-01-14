@@ -6,7 +6,7 @@ import { User, Camera, Save, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 
 export function Profile() {
-  const { user, profile, updateProfile, refreshProfile } = useAuth();
+  const { user, profile, updateProfile } = useAuth();
   const [name, setName] = useState(profile?.name || '');
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '');
   const [loading, setLoading] = useState(false);
