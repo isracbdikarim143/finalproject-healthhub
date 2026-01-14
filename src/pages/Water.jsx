@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import type { WaterLog } from '../types';
 import { toast } from '../components/Toast';
 import { Droplet, Plus, Calendar, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 
 export function Water() {
   const { user } = useAuth();
-  const [waterLogs, setWaterLogs] = useState<WaterLog[]>([]);
+  const [waterLogs, setWaterLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   // LOADING STATE: Track form and quick-add submissions
@@ -70,31 +69,31 @@ export function Water() {
     };
   };
 
-  const addWaterLog = async (amount: number, date: string) => {
+  const addWaterLog = async (amount, date) => {
     if (!user || submitting) return; // LOADING STATE: Prevent concurrent submissions
 
     setSubmitting(true); // LOADING STATE: Start
     try {
       const { error } = await supabase.from('water_logs').insert({
-        user_id: user.id,
-        amount_ml: amount,
-        date: date,
+        user_id,
+        amount_ml,
+        date,
       });
 
       if (error) throw error;
       toast.success('✅ Water intake saved successfully');
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Failed to log water intake');
     } finally {
       setSubmitting(false); // LOADING STATE: End
     }
   };
 
-  const handleQuickAdd = async (amount: number) => {
+  const handleQuickAdd = async (amount) => {
     await addWaterLog(amount, format(new Date(), 'yyyy-MM-dd'));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) return;
 
@@ -106,14 +105,14 @@ export function Water() {
     });
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this entry?')) return;
 
     try {
       const { error } = await supabase.from('water_logs').delete().eq('id', id);
       if (error) throw error;
       toast.success('Water log deleted successfully');
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Failed to delete log');
     }
   };

@@ -1,27 +1,17 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from '../Toast';
-import { UserPlus } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 
-interface SignupProps {
-  onToggle: () => void;
-}
 
-export function Signup({ onToggle }: SignupProps) {
-  const [name, setName] = useState('');
+export function Login({ onToggle  }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signUp } = useAuth();
+  const { signIn } = useAuth();
 
   // AUTH OPTIMIZATION: Client-side validation before API call
-  const validateForm = (): boolean => {
-    // Name validation
-    if (name.trim().length < 2) {
-      toast.error('⚠️ Name must be at least 2 characters');
-      return false;
-    }
-
+  const validateForm = () => {
     // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -38,7 +28,7 @@ export function Signup({ onToggle }: SignupProps) {
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // AUTH OPTIMIZATION: Validate before sending request
@@ -49,13 +39,13 @@ export function Signup({ onToggle }: SignupProps) {
 
     try {
       // AUTH OPTIMIZATION: Send request to Supabase Auth with real credentials
-      await signUp(email, password, name);
+      await signIn(email, password);
       
       // AUTH OPTIMIZATION: Show success toast (redirect handled by Auth page)
-      toast.success('✅ Account created successfully');
-    } catch (error: any) {
+      toast.success('✅ Logged in successfully');
+    } catch (error) {
       // AUTH OPTIMIZATION: Show friendly error messages
-      toast.error(error.message || 'Failed to sign up');
+      toast.error(error.message || 'Failed to sign in');
     } finally {
       // AUTH OPTIMIZATION: Re-enable button
       setLoading(false);
@@ -67,36 +57,17 @@ export function Signup({ onToggle }: SignupProps) {
       <div className="card max-w-md w-full">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-4">
-            <UserPlus className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+            <LogIn className="w-8 h-8 text-primary-600 dark:text-primary-400" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Join <span className="text-primary-600">HealthHub</span>
+            Welcome to <span className="text-primary-600">HealthHub</span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Start your health journey today
+            Sign in to continue your health journey
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="label">
-              Full Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="input"
-              placeholder="John Doe"
-              minLength={2}
-              required
-            />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Your first and last name
-            </p>
-          </div>
-
           <div>
             <label htmlFor="email" className="label">
               Email
@@ -131,23 +102,23 @@ export function Signup({ onToggle }: SignupProps) {
             </p>
           </div>
 
-          {/* AUTH OPTIMIZATION: Button disabled during API call, shows loading text */}
+          {/* AUTH OPTIMIZATION, shows loading text */}
           <button
             type="submit"
             disabled={loading}
             className="btn-primary w-full"
           >
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-          Already have an account?{' '}
+          Don't have an account?{' '}
           <button
             onClick={onToggle}
             className="text-primary-600 hover:text-primary-700 font-medium"
           >
-            Sign in
+            Sign up
           </button>
         </p>
       </div>

@@ -31,8 +31,7 @@ export function Sidebar() {
   const { user, profile } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   
-  // BMI SIDEBAR: State for BMI input
-  const [height, setHeight] = useState('');
+  // BMI SIDEBAR, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [savingBMI, setSavingBMI] = useState(false);
 
@@ -68,9 +67,9 @@ export function Sidebar() {
 
       // Save to database
       const { error } = await supabase.from('bmi_logs').insert({
-        user_id: user.id,
-        height: heightNum,
-        weight: weightNum,
+        user_id,
+        height,
+        weight,
         bmi,
         category,
       });
@@ -85,7 +84,7 @@ export function Sidebar() {
       
       // Close sidebar on mobile
       setIsOpen(false);
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Failed to save BMI');
     } finally {
       setSavingBMI(false);

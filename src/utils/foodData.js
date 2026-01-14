@@ -1,6 +1,4 @@
-import type { FoodItem } from '../types';
-
-export const foodDatabase: FoodItem[] = [
+export const foodDatabase = [
   // Somali Foods
   {
     name: 'Bariis (Rice)',

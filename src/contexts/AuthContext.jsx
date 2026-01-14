@@ -1,25 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
-import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { supabase } from '../lib/supabase';
-import type { UserProfile } from '../types';
+import { supabase } from '../lib/supabase.js';
 
-interface AuthContextType {
-  user: SupabaseUser | null;
-  profile: UserProfile | null;
-  loading: boolean;
-  signUp: (email: string, password: string, name: string) => Promise<void>;
-  signIn: (email: string, password: string) => Promise<void>;
-  signOut: () => Promise<void>;
-  updateProfile: (updates: Partial<UserProfile>) => Promise<void>;
-  refreshProfile: () => Promise<void>;
-}
+const AuthContext = createContext(undefined);
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<SupabaseUser | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,16 +19,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     });
 
-    // Listen for auth changes
+    
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        // Load profile for any auth event
+        
         await loadProfile(session.user.id);
         
-        // Update login time for sign in events
+        
         if (event === 'SIGNED_IN') {
           await supabase
             .from('users_profile')
@@ -61,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const loadProfile = async (userId: string) => {
+  const loadProfile = async (userId) => {
     try {
       const { data, error } = await supabase
         .from('users_profile')
@@ -70,12 +56,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (error) {
-        // If profile doesn't exist, create a basic one
+        
         if (error.code === 'PGRST116') {
           const { data: newProfile } = await supabase
             .from('users_profile')
             .insert({
-              user_id: userId,
+              user_id,
               name: 'User',
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
@@ -99,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (email, password, name) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -121,13 +107,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error: profileError } = await supabase
         .from('users_profile')
         .upsert({
-          user_id: data.user.id,
+          user_id,
           name,
           last_login: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         }, {
           onConflict: 'user_id',
-          ignoreDuplicates: false,
+          ignoreDuplicates,
         });
 
       if (profileError) {
@@ -138,7 +124,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email, password) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -172,7 +158,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
   };
 
-  const updateProfile = async (updates: Partial<UserProfile>) => {
+  const updateProfile = async (updates) => {
     if (!user) throw new Error('No user logged in');
 
     const { error } = await supabase

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import type { BMILog } from '../types';
 import { toast } from '../components/Toast';
 import { calculateBMI, getBMICategory, getBMICategoryColor } from '../utils/bmi';
 import { Activity, TrendingUp, Calendar } from 'lucide-react';
@@ -11,14 +10,10 @@ export function BMICalculator() {
   const { user } = useAuth();
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
-  const [bmiHistory, setBmiHistory] = useState<BMILog[]>([]);
+  const [bmiHistory, setBmiHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-  // BMI FIX: Add calculating state for better UX
-  const [calculating, setCalculating] = useState(false);
-  const [currentBMI, setCurrentBMI] = useState<{
-    value: number;
-    category: string;
-  } | null>(null);
+  // BMI FIX, setCalculating] = useState(false);
+  const [currentBMI, setCurrentBMI] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -45,7 +40,7 @@ export function BMICalculator() {
     }
   };
 
-  const handleCalculate = async (e: React.FormEvent) => {
+  const handleCalculate = async (e) => {
     e.preventDefault();
     if (!user || calculating) return; // BMI FIX: Prevent double submission
 
@@ -71,35 +66,35 @@ export function BMICalculator() {
 
     setCalculating(true); // BMI FIX: Start calculating state
 
-    // BMI FIX: Calculate using cm and kg (formula: weight / (height/100)²)
+    // BMI FIX: Calculate using cm and kg (formula)²)
     const bmi = calculateBMI(heightNum, weightNum);
     const category = getBMICategory(bmi);
 
-    setCurrentBMI({ value: bmi, category });
+    setCurrentBMI({ value, category });
 
     try {
       // BMI FIX: Save to bmi_logs table for dashboard realtime update
       const { error } = await supabase.from('bmi_logs').insert({
-        user_id: user.id,
-        height: heightNum,
-        weight: weightNum,
+        user_id,
+        height,
+        weight,
         bmi,
         category,
       });
 
       if (error) throw error;
 
-      // BMI FIX: Show success toast with emoji as required
+      // BMI FIX: Show success toast with emoji
       toast.success('✅ BMI calculated successfully');
       loadBMIHistory();
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Failed to save BMI');
     } finally {
       setCalculating(false); // BMI FIX: End calculating state
     }
   };
 
-  const getBMIInfo = (category: string) => {
+  const getBMIInfo = (category) => {
     switch (category) {
       case 'Underweight':
         return {

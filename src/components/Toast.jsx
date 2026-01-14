@@ -2,20 +2,10 @@ import { useEffect } from 'react';
 import { CheckCircle, XCircle, X } from 'lucide-react';
 import { create } from 'zustand';
 
-interface Toast {
-  id: string;
-  message: string;
-  type: 'success' | 'error';
-}
 
-interface ToastStore {
-  toasts: Toast[];
-  addToast: (message: string, type: 'success' | 'error') => void;
-  removeToast: (id: string) => void;
-}
 
 export const useToastStore = create<ToastStore>((set) => ({
-  toasts: [],
+  toasts,
   addToast: (message, type) => {
     const id = Math.random().toString(36).substring(7);
     set((state) => ({
@@ -49,7 +39,7 @@ export function ToastContainer() {
   );
 }
 
-function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: () => void }) {
+function ToastItem({ toast, onRemove }) {
   useEffect(() => {
     const timer = setTimeout(onRemove, 5000);
     return () => clearTimeout(timer);
@@ -81,6 +71,6 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: () => void }) 
 
 // Helper function to show toasts
 export const toast = {
-  success: (message: string) => useToastStore.getState().addToast(message, 'success'),
-  error: (message: string) => useToastStore.getState().addToast(message, 'error'),
+  success: (message) => useToastStore.getState().addToast(message, 'success'),
+  error: (message) => useToastStore.getState().addToast(message, 'error'),
 };

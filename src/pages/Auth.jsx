@@ -9,14 +9,14 @@ export function Auth() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect to dashboard if already authenticated
+  
   useEffect(() => {
     if (!loading && user) {
       navigate('/', { replace: true });
     }
   }, [user, loading, navigate]);
 
-  // Show loading while checking auth state
+  
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">

@@ -17,18 +17,11 @@ import {
 import { TrendingUp } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
-interface DailyData {
-  date: string;
-  workouts: number;
-  caloriesBurned: number;
-  nutritionCalories: number;
-  waterIntake: number;
-}
 
 export function Progress() {
   const { user } = useAuth();
   const { theme } = useTheme();
-  const [data, setData] = useState<DailyData[]>([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [days, setDays] = useState(7);
 
@@ -42,7 +35,7 @@ export function Progress() {
     if (!user) return;
 
     setLoading(true);
-    const dailyData: DailyData[] = [];
+    const dailyData = [];
 
     try {
       // Generate dates for the last N days
@@ -81,7 +74,7 @@ export function Progress() {
 
         dailyData.push({
           date: format(new Date(date), 'MMM dd'),
-          workouts: workoutsCount,
+          workouts,
           caloriesBurned,
           nutritionCalories,
           waterIntake,

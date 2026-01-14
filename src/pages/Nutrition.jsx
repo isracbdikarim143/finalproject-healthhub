@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import type { Nutrition as NutritionType } from '../types';
 import { toast } from '../components/Toast';
 import { foodDatabase } from '../utils/foodData';
 import { Apple, Plus, Calendar, Trash2 } from 'lucide-react';
@@ -9,12 +8,11 @@ import { format } from 'date-fns';
 
 export function Nutrition() {
   const { user } = useAuth();
-  const [nutritionLogs, setNutritionLogs] = useState<NutritionType[]>([]);
+  const [nutritionLogs, setNutritionLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [selectedFood, setSelectedFood] = useState('');
-  // LOADING STATE: Track submission state
-  const [submitting, setSubmitting] = useState(false);
+  // LOADING STATE, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     date: format(new Date(), 'yyyy-MM-dd'),
   });
@@ -69,7 +67,7 @@ export function Nutrition() {
     };
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user || !selectedFood || submitting) return; // LOADING STATE: Prevent double submit
 
@@ -79,14 +77,14 @@ export function Nutrition() {
     setSubmitting(true); // LOADING STATE: Start
     try {
       const { error } = await supabase.from('nutrition').insert({
-        user_id: user.id,
-        food_name: food.name,
-        category: food.category,
-        calories: food.calories,
-        protein: food.protein,
-        fat: food.fat,
-        carbs: food.carbs,
-        date: formData.date,
+        user_id,
+        food_name,
+        category,
+        calories,
+        protein,
+        fat,
+        carbs,
+        date,
       });
 
       if (error) throw error;
@@ -97,21 +95,21 @@ export function Nutrition() {
       setFormData({
         date: format(new Date(), 'yyyy-MM-dd'),
       });
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Failed to add nutrition');
     } finally {
       setSubmitting(false); // LOADING STATE: End
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this entry?')) return;
 
     try {
       const { error } = await supabase.from('nutrition').delete().eq('id', id);
       if (error) throw error;
       toast.success('Nutrition entry deleted successfully');
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Failed to delete entry');
     }
   };

@@ -1,22 +1,21 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { ProtectedRoute } from './components/auth/ProtectedRoute';
-import { MainLayout } from './components/layout/MainLayout';
-import { ToastContainer } from './components/Toast';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { Auth } from './pages/Auth';
-import { Dashboard } from './pages/Dashboard';
-import { Workouts } from './pages/Workouts';
-import { Nutrition } from './pages/Nutrition';
-import { Water } from './pages/Water';
-import { Progress } from './pages/Progress';
-import { BMICalculator } from './pages/BMICalculator';
-import { Profile } from './pages/Profile';
+import { AuthProvider } from './contexts/AuthContext.jsx';
+import { ThemeProvider } from './contexts/ThemeContext.jsx';
+import { ProtectedRoute } from './components/auth/ProtectedRoute.jsx';
+import { MainLayout } from './components/layout/MainLayout.jsx';
+import { ToastContainer } from './components/Toast.jsx';
+import { ErrorBoundary } from './components/ErrorBoundary.jsx';
+import { Auth } from './pages/Auth.jsx';
+import { Dashboard } from './pages/Dashboard.jsx';
+import { Workouts } from './pages/Workouts.jsx';
+import { Nutrition } from './pages/Nutrition.jsx';
+import { Water } from './pages/Water.jsx';
+import { Progress } from './pages/Progress.jsx';
+import { BMICalculator } from './pages/BMICalculator.jsx';
+import { Profile } from './pages/Profile.jsx';
 
 function App() {
   return (
-    // AUTH OPTIMIZATION: ErrorBoundary wraps entire app to catch crashes
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>

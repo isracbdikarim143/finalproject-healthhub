@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import type { DashboardStats } from '../types';
 import { Dumbbell, Flame, Droplet, Apple, Activity } from 'lucide-react';
 import { format } from 'date-fns';
 import { getBMICategoryColor } from '../utils/bmi';
 
 export function Dashboard() {
-  // FIX: Add profile to destructuring to prevent "profile is not defined" error
+  
   const { user, profile, loading: authLoading } = useAuth();
-  const [stats, setStats] = useState<DashboardStats>({
+  const [stats, setStats] = useState({
     totalWorkouts: 0,
     totalCaloriesBurned: 0,
     totalWaterIntake: 0,
@@ -75,7 +74,7 @@ export function Dashboard() {
         totalCaloriesBurned,
         totalWaterIntake,
         totalNutritionCalories,
-        latestBMI: bmiData || undefined,
+        latestBMI,
       });
     } catch (error) {
       console.error('Error loading stats:', error);
@@ -163,7 +162,7 @@ export function Dashboard() {
     };
   };
 
-  // FIX: Wait for both auth and data loading to prevent "profile is not defined"
+  
   if (loading || authLoading || !profile) {
     return (
       <div className="space-y-6">

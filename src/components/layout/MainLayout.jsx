@@ -1,17 +1,13 @@
-import type { ReactNode } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 
-interface MainLayoutProps {
-  children: ReactNode;
-}
 
-export function MainLayout({ children }: MainLayoutProps) {
+export function MainLayout({ children  }) {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <div className="flex-1 lg:ml-64 flex flex-col">
-        {/* UI FIX: Add professional top header with username, avatar, theme toggle */}
+        {/* UI FIX, avatar, theme toggle */}
         <Header />
         
         {/* Main Content Area */}

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import type { Workout } from '../types';
 import { toast } from '../components/Toast';
 import { exerciseList } from '../utils/foodData';
 import { Dumbbell, Plus, Calendar, Clock, Flame, Trash2 } from 'lucide-react';
@@ -9,7 +8,7 @@ import { format } from 'date-fns';
 
 export function Workouts() {
   const { user } = useAuth();
-  const [workouts, setWorkouts] = useState<Workout[]>([]);
+  const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   // LOADING STATE: Track form submission to disable button and prevent double-submit
@@ -71,18 +70,18 @@ export function Workouts() {
     };
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user || submitting) return; // LOADING STATE: Prevent double submission
 
     setSubmitting(true); // LOADING STATE: Start submission
     try {
       const { error } = await supabase.from('workouts').insert({
-        user_id: user.id,
-        exercise_name: formData.exercise_name,
+        user_id,
+        exercise_name,
         duration: parseInt(formData.duration),
         calories_burned: parseInt(formData.calories_burned),
-        date: formData.date,
+        date,
       });
 
       if (error) throw error;
@@ -95,21 +94,21 @@ export function Workouts() {
         calories_burned: '',
         date: format(new Date(), 'yyyy-MM-dd'),
       });
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Failed to add workout');
     } finally {
       setSubmitting(false); // LOADING STATE: End submission
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this workout?')) return;
 
     try {
       const { error } = await supabase.from('workouts').delete().eq('id', id);
       if (error) throw error;
       toast.success('Workout deleted successfully');
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Failed to delete workout');
     }
   };

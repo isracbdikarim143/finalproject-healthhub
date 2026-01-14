@@ -12,7 +12,7 @@ export function Profile() {
   const [loading, setLoading] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarUpload = async (e) => {
     try {
       setUploadingAvatar(true);
 
@@ -51,8 +51,8 @@ export function Profile() {
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, file, {
-          contentType: file.type,
-          upsert: true, // Allow overwriting
+          contentType,
+          upsert, // Allow overwriting
         });
 
       if (uploadError) {
@@ -71,7 +71,7 @@ export function Profile() {
 
       setAvatarUrl(newAvatarUrl);
       toast.success('✅ Avatar uploaded successfully');
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Error uploading avatar');
       console.error('Avatar upload error:', error);
     } finally {
@@ -79,25 +79,25 @@ export function Profile() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       await updateProfile({
         name,
-        avatar_url: avatarUrl,
+        avatar_url,
       });
 
       toast.success('Profile updated successfully');
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Failed to update profile');
     } finally {
       setLoading(false);
     }
   };
 
-  const getInitials = (name: string) => {
+  const getInitials = (name) => {
     return name
       .split(' ')
       .map((n) => n[0])

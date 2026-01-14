@@ -1,23 +1,15 @@
 import { Component } from 'react';
-import type { ReactNode } from 'react';
 import { AlertTriangle } from 'lucide-react';
 
-interface Props {
-  children: ReactNode;
-}
 
-interface State {
-  hasError: boolean;
-  error: Error | null;
-}
 
 /**
  * ERROR BOUNDARY: Catches React errors and prevents app crashes
  * Wraps Dashboard, Auth, and Profile components
  * Shows friendly error UI instead of blank screen
  */
-export class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+export class ErrorBoundary extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       hasError: false,
@@ -25,7 +17,7 @@ export class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error) {
     // Update state so the next render shows the fallback UI
     return {
       hasError: true,
@@ -33,7 +25,7 @@ export class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: any) {
+  componentDidCatch(error, errorInfo) {
     // Log error to console for debugging
     console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
