@@ -10,7 +10,7 @@ export function Header() {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef(null);
 
   // UI FIX: Close dropdown when clicking outside
   useEffect(() => {
