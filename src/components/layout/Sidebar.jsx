@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
-import { toast } from '../Toast';
+import { toast } from '../Toast.jsx';
 import { calculateBMI, getBMICategory } from '../../utils/bmi';
 import {
   LayoutDashboard,

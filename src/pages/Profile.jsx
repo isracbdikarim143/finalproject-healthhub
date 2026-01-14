@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { toast } from '../components/Toast';
+import { toast } from '../components/Toast.jsx';
 import { User, Camera, Save, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { toast } from '../Toast';
+import { toast } from '../Toast.jsx';
 import { LogIn } from 'lucide-react';
 
 

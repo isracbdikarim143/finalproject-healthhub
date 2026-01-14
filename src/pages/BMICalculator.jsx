@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { toast } from '../components/Toast';
+import { toast } from '../components/Toast.jsx';
 import { calculateBMI, getBMICategory, getBMICategoryColor } from '../utils/bmi';
 import { Activity, TrendingUp, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
